@@ -15,17 +15,6 @@ pipeline {
                           branches: [[name: '*/main']],
                           userRemoteConfigs: [[url: 'https://github.com/Tony-BY/test-task.git']]])
             }
-            post {
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
-            }
         }
         stage("Validate Dockerfile"){
             steps{
@@ -46,17 +35,6 @@ pipeline {
                 echo "========Test docker image========"
 
             }
-        }
-    }
-    post{
-        always{
-            echo "========always========"
-        }
-        success{
-            echo "========pipeline executed successfully ========"
-        }
-        failure{
-            echo "========pipeline execution failed========"
         }
     }
 }
