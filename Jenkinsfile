@@ -15,8 +15,8 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/Tony-BY/test-task.git']]])
             }
         }
-        stage("Validate Dockerfile"){
-            steps{
+        stage("Validate Dockerfile") {
+            steps {
                 echo "========executing hadolint========"
                 sh "docker run --rm -i hadolint/hadolint < Dockerfile"
             }
@@ -33,6 +33,15 @@ pipeline {
             steps {
                 echo "========Test docker image========"
 
+            }
+        }
+        stage("Push image to DockerHub") {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
             }
         }
     }
