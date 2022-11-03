@@ -3,9 +3,8 @@ pipeline {
         registry = "tonyby/test-task"
         registryCredential = 'dockerhub'
     }
-    agent{
-        label any
-    }
+    agent any
+
     stages {
         stage("Checkout code") {
             steps {
