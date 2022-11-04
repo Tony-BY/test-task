@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: falskdemo
+  labels:
+    app: falskdemo
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: falskdemo
+  template:
+    metadata:
+      labels:
+        app: falskdemo
+    spec:
+      containers:
+      - name: falskdemo
+        image: tonyby/test-task:latest
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: falskdemo-service
+  labels:
+    run: falskdemo-service
+spec:
+        #type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5000
+    protocol: TCP
+  selector:
+    app: falskdemo
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-sa
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/server-alias: "pre-prod.k8s-26.sa"
+spec:
+  rules:
+    - host: pre-prod.k8s-25.sa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: falskdemo-service
+                port:
+                  number: 80
