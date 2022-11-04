@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: falskdemo
-        image: tonyby/test-task:latest
+        image: tonyby/test-task:20
         ports:
         - containerPort: 5000
         resources:
