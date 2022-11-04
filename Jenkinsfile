@@ -102,9 +102,9 @@ pipeline {
                                 sh "kubectl delete -f manifests/pre-prod/. -n pre-prod"
                             }
                         }
-                    }
-                    catch(Exception err) {
-                        error "Deployment failed!"
+                        catch(Exception err) {
+                            error "Deployment failed!"
+                        }
                     }
                 }
             }
