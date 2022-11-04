@@ -56,14 +56,14 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'github_credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                             sh "git config user.email iantonio.by@gmail.com"
                             sh "git config user.name Jenkins"
-                            sh "cat manifests/pre-prod/demoapp.yaml"
+                            // sh "cat manifests/pre-prod/demoapp.yaml"
                             echo "============================== Update pre-prod manifest =============================="
                             sh "sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/pre-prod/demoapp.yaml"
-                            sh "cat manifests/pre-prod/demoapp.yaml"
-                            sh "cat manifests/prod/demoapp.yaml"
+                            // sh "cat manifests/pre-prod/demoapp.yaml"
+                            // sh "cat manifests/prod/demoapp.yaml"
                             echo "============================== Update prod manifest =============================="
                             sh "sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/prod/demoapp.yaml"
-                            sh "cat manifests/prod/demoapp.yaml"
+                            // sh "cat manifests/prod/demoapp.yaml"
                             sh "git add ."
                             sh "git commit -m 'Update manifest with container version ${BUILD_NUMBER}'"
                             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Tony-BY/test-task.git HEAD:main"                            
@@ -108,6 +108,14 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+    post {
+        success {
+            slackSend (color: '#00FF00', message: "✔️ Deployment success: Job: '${env.JOB_NAME} Build: ${env.BUILD_NUMBER}'")
+        }
+        failure {
+            slackSend (color: '#FF0000', message: "❌ Deployment failed: Job: '${env.JOB_NAME} Build: ${env.BUILD_NUMBER}'")
         }
     }
 }
