@@ -73,5 +73,14 @@ pipeline {
             }
 
         }
+        stage("Deploy in K8s pre-prod") {
+            steps {
+                script {
+                    sh "kubectl apply -f manifests/pre-prod/. -n pre-prod"
+                    sleep 5
+                    sh "kubectl get pods -n pre-prod"
+                }
+            }
+        }
     }
 }
