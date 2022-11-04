@@ -54,21 +54,19 @@ pipeline {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         withCredentials([usernamePassword(credentialsId: 'github_credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                            sh '''
-                            git config user.email "iantonio.by@gmail.com"
-                            git config user.name "Jenkins"
-                            cat manifests/pre-prod/demoapp.yaml
-                            echo '============================== Update pre-prod manifest =============================='
-                            sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/pre-prod/demoapp.yaml
-                            cat manifests/pre-prod/demoapp.yaml
-                            echo '============================== Update prod manifest =============================='
-                            cat manifests/prod/demoapp.yaml
-                            sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/prod/demoapp.yaml
-                            cat manifests/prod/demoapp.yaml
-                            git add .
-                            git commit -m "Update manifest with container version ${BUILD_NUMBER}"
-                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Tony-BY/test-task.git HEAD:main
-                            '''
+                            sh "git config user.email iantonio.by@gmail.com"
+                            sh "git config user.name Jenkins"
+                            sh "cat manifests/pre-prod/demoapp.yaml"
+                            echo "============================== Update pre-prod manifest =============================="
+                            sh "sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/pre-prod/demoapp.yaml"
+                            sh "cat manifests/pre-prod/demoapp.yaml"
+                            echo "============================== Update prod manifest =============================="
+                            sh "cat manifests/prod/demoapp.yaml"
+                            sh "sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/prod/demoapp.yaml"
+                            sh "cat manifests/prod/demoapp.yaml"
+                            sh "git add ."
+                            sh "git commit -m 'Update manifest with container version ${BUILD_NUMBER}'"
+                            sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Tony-BY/test-task.git HEAD:main"                            
                         }
                     }
                 }
