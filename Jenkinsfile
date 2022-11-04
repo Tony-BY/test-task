@@ -60,8 +60,8 @@ pipeline {
                             echo "============================== Update pre-prod manifest =============================="
                             sh "sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/pre-prod/demoapp.yaml"
                             sh "cat manifests/pre-prod/demoapp.yaml"
-                            echo "============================== Update prod manifest =============================="
                             sh "cat manifests/prod/demoapp.yaml"
+                            echo "============================== Update prod manifest =============================="
                             sh "sed -i 's+tonyby/test-task.*+tonyby/test-task:${BUILD_NUMBER}+g' manifests/prod/demoapp.yaml"
                             sh "cat manifests/prod/demoapp.yaml"
                             sh "git add ."
@@ -79,6 +79,33 @@ pipeline {
                     sh "kubectl apply -f manifests/pre-prod/. -n pre-prod"
                     sleep 5
                     sh "kubectl get pods -n pre-prod"
+                }
+            }
+        }
+        stage("Deploy in K8s prod") {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        def prod = true
+                        try {
+                            input("Do you want to deploy application in production environment?")
+                        }
+                        catch(err) {
+                            prod = false
+                        }
+                        try {
+                            if(prod) {
+                                sh "kubectl apply -f manifests/prod/. -n prod"
+                                sleep 5
+                                sh "kubectl get pods -n prod"
+                                echo "================ Deleting app from pre-prod environment ================"
+                                sh "kubectl delete -f manifests/pre-prod/. -n pre-prod"
+                            }
+                        }
+                    }
+                    catch(Exception err) {
+                        error "Deployment failed!"
+                    }
                 }
             }
         }
