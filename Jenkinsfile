@@ -32,7 +32,7 @@ pipeline {
         stage("Test image") {
             steps {
                 echo "========Test docker image========"
-                sh "docker run -d -name test -p 5000:5000 -i $registry:$BUILD_NUMBER"
+                sh "docker run -d --name test -p 5000:5000 -i $registry:$BUILD_NUMBER"
                 sh "curl http://localhost:5000"
                 sh "docker stop test"
 
