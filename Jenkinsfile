@@ -33,6 +33,7 @@ pipeline {
             steps {
                 echo "========Test docker image========"
                 sh "docker run -d --name test -p 5000:5000 -i $registry:$BUILD_NUMBER"
+                sleep 10
                 sh "curl http://localhost:5000"
                 sh "docker stop test"
 
