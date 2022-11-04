@@ -32,6 +32,8 @@ pipeline {
         stage("Test image") {
             steps {
                 echo "========Test docker image========"
+                sh "docker run -p 5000:5000 -i $registry:$BUILD_NUMBER"
+                sh "curl http://localhost:5000"
 
             }
         }
@@ -44,5 +46,14 @@ pipeline {
                 }
             }
         }
+        // stage("Update manifests") {
+        //     script {
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //             withCredentials([usernamePassword(credentialsId: 'github_credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')])
+
+        //         }
+        //     }
+
+        // }
     }
 }
