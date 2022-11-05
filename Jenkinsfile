@@ -112,10 +112,10 @@ pipeline {
     }
     post {
         success {
-            slackSend (color: '#2EB886', message: "✔️ Deployment success: Job: '${env.JOB_NAME} Build: ${env.BUILD_NUMBER}'")
+            slackSend (color: '#2EB886', message: "✔️ Deployment success: Job: ${env.JOB_NAME} Build: ${env.BUILD_NUMBER}")
         }
         failure {
-            slackSend (color: '#A30200', message: "❌ Deployment failed: Job: '${env.JOB_NAME} Build: ${env.BUILD_NUMBER}'")
+            slackSend (color: '#A30200', message: "❌ Deployment failed: Job: ${env.JOB_NAME} Build: ${env.BUILD_NUMBER}")
         }
     }
 }
