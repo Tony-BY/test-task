@@ -37,7 +37,7 @@ metadata:
   labels:
     run: flaskdemo-service
 spec:
-        #type: LoadBalancer
+  type: NodePort #LoadBalancer
   ports:
   - port: 80
     targetPort: 5000
