@@ -82,6 +82,14 @@ pipeline {
                 }
             }
         }
+        stage("Pre-prod testing"){
+            steps {
+                script {
+                    sleep 10
+                    sh "curl http://pre-prod.k8s-25.sa"
+                }
+            }
+        }
         stage("Deploy in K8s prod") {
             steps {
                 script {
